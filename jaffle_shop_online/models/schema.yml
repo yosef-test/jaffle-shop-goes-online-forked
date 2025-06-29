@@ -76,6 +76,11 @@ models:
     columns:
       - name: order_id
         description: This is a unique identifier for an order
+        tests:
+          - unique:
+              config:
+                severity: warn
+                owner: ["@data-ops"]
 
       - name: customer_id
         description: Foreign key to the customers table
@@ -86,9 +91,21 @@ models:
                 owner: ["@data-ops"]
               to: ref('customers')
               field: customer_id
+          - not_null:
+              config:
+                severity: warn
+                owner: ["@data-ops"]
 
       - name: order_date
         description: Date (UTC) that the order was placed
+        tests:
+          - dbt_utils.date_spine:
+              datepart: day
+              start_date: '2010-01-01'
+              end_date: '{{ current_date() }}'
+              config:
+                severity: warn
+                owner: ["@data-ops"]
 
       - name: status
         description: '{{ doc("orders_status") }}'
@@ -116,6 +133,11 @@ models:
               column_anomalies:
                 - zero_count
                 - zero_percent
+          - accepted_values:
+              values: ['>0']
+              config:
+                severity: warn
+                owner: ["@data-ops"]
 
       - name: credit_card_amount
         description: Amount of the order (AUD) paid for by credit card
