@@ -1,0 +1,26 @@
+
+# Existing content (assumed)
+version: 2
+
+models:
+  - name: orders
+    description: This table has basic information about orders, as well as some derived facts based on payments
+    columns:
+      - name: order_id
+        tests:
+          - unique
+      - name: amount
+        tests:
+          - accepted_values:
+              values: ['>0']
+              config:
+                where: "status != 'returned'"
+      - name: order_date
+        tests:
+          - accepted_values:
+              values: ['>=2020-01-01', '<current_date']
+      - name: customer_id
+        tests:
+          - relationships:
+              to: ref('customers')
+              field: customer_id
