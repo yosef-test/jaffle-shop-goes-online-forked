@@ -1,0 +1,17 @@
+version: 2
+
+models:
+  - name: ads_spend
+    columns:
+      - name: date_day
+        tests:
+          - not_null
+      - name: utm_source
+        tests:
+          - not_null
+      - name: spend
+        tests:
+          - not_null
+    tests:
+      - unique:
+          column_name: [date_day, utm_source]

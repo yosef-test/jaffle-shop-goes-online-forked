@@ -1,0 +1,17 @@
+version: 2
+
+models:
+  - name: attribution_touches
+    columns:
+      - name: utm_source
+        tests:
+          - accepted_values:
+              values: ['google', 'facebook', 'twitter', 'linkedin', 'other']
+              config:
+                severity: warn
+      - name: linear_points
+        tests:
+          - elementary.positive_value
+      - name: linear_revenue
+        tests:
+          - elementary.positive_value
